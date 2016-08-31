@@ -1,0 +1,35 @@
+default_user: vagrant
+default_pass: vagrant
+default_box: "ubuntu/trusty64"
+default_net_prefix: "172.16.1"
+default_prefix: "cicd"
+default_ram: 1024
+default_port: 22
+default_vagrant_dir: "{{ playbook_dir }}/../vagrant"
+
+cicd:
+  hosts:
+    - { cname: "manager",
+        user: "{{ default_user }}",
+        pass: "{{ default_pass }}",
+        box: "{{ default_box }}",
+        ip: "{{ default_net_prefix }}.111",
+        ssh_port: "{{ default_port }}",
+		ram: "{{ default_ram }}"
+		}
+    - { cname: "node",
+        user: "{{ default_user }}",
+        pass: "{{ default_pass }}",
+        box: "{{ default_box }}",
+        ip: "{{ default_net_prefix }}.112",
+        ssh_port: "{{ default_port }}",
+		ram: "{{ default_ram }}"
+		}
+    - { cname: "replica",
+        user: "{{ default_user }}",
+        pass: "{{ default_pass }}",
+        box: "{{ default_box }}",
+        ip: "{{ default_net_prefix }}.113",
+        ssh_port: "{{ default_port }}",
+		ram: "{{ default_ram }}"
+		}

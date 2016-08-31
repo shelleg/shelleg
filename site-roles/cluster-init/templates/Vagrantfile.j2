@@ -1,14 +1,25 @@
 # -*- mode:1
 # : ruby -*-
 # # vi: set ft=ruby :
-vagrant_dir = File.expand_path(File.dirname(__FILE__))
-g_roles_dir = File.expand_path(File.dirname(__FILE__)) + '/../galaxy-roles'
-s_roles_dir = File.expand_path(File.dirname(__FILE__)) + '/../site-roles'
+
 roles_exist = 0
 ansible_verbosity = '-vvv'
 # Specify minimum Vagrant version and Vagrant API version
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
+
+
+vagrant_dir 	= File.expand_path(File.dirname(__FILE__))
+g_roles_dir     = File.expand_path(File.dirname(__FILE__)) + '/../galaxy-roles'
+s_roles_dir     = File.expand_path(File.dirname(__FILE__)) + '/../site-roles'
+ansible_vars    = "{{ playbook_dir }}" + "/../group_vars/all"
+puts "#{ansible_vars}/00_general"
+# This example shows how Vagrant variables can be loaded from Ansible's variables,
+# and a demonstration of using the DEFAULTS, which will be called automatically
+# when running from `deploy.sh vagrant`.
+# It makes sure that configuration will only be done in one place,
+# Follow this method on future changes to this file.
+# CONF_GENERAL = YAML.load( File.open( ansible_vars + '/' + '00_general', File::RDONLY ).read )
 
 # Require YAML module
 require 'yaml'
@@ -32,22 +43,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["ram"]
-      end
-      srv.vm.provision :ansible do |ansible|
-            ansible.limit = servers[:name]
-            ansible.playbook = "#{vagrant_dir}/../playbooks/swarm-cluster.yml"
-            ansible.sudo = true
-            ansible.sudo_user = "root"
-            ansible.host_key_checking = false
-            ansible.verbose = "#{ansible_verbosity}"
-            ansible.inventory_path = "#{vagrant_dir}/inventory"
-            ansible.extra_vars = {
-              some_var: "some_value",
-              dict: {
-                kay1: "val1",
-                kay2: "val2"
-              }
-            }
       end
     end
   end

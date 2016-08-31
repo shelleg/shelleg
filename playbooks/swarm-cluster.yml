@@ -3,15 +3,6 @@
   #become: yes
   #become_user: root
   #gather_facts: no
-  pre_tasks:   # Chiken & Egg ...
-    - name: "Install ansible requirements"
-      pip:
-        name: "python-vagrant"
-        state: present
-      tags:
-        - vagrant
-      when: (vagrant is defined) and (aws is undefined)
-
   vars:
     vagrant: true
   roles:
@@ -20,7 +11,8 @@
     #- { role: ../site-roles/ }
     #- { role: ../site-roles/ }
     #- { role: ../site-roles/ }
-- hosts: cicd-manager
+
+- hosts: swarm-cluster-nodes
   become: yes
   become_user: root 
   tasks:

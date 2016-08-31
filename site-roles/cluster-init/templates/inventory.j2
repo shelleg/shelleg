@@ -6,7 +6,11 @@
 # 172.16.1.111  private_ip=172.16.1.111 ansible_ssh_user=ubuntu
 
 {% for host in cicd.hosts %}
-[{{ default.prefix }}-{{ host.cname }}]
-{{ host.ip }} private_ip={{ host.ip }} ansible_ssh_user="{{ host.user }}"
+[{{ default_prefix }}-{{ host.cname }}]
+{{ host.ip }} ansible_user="{{ host.user }}" ansible_ssh_pass="{{ host.pass }}" ansible_ssh_key="{{ default_vagrant_dir }}/.vagrant/machines/{{ default_prefix }}-{{ host.cname }}/virtualbox/private_key"
 
+{% endfor %}
+[swarm-cluster-nodes]
+{% for host in cicd.hosts %}
+{{ host.ip }}
 {% endfor %}

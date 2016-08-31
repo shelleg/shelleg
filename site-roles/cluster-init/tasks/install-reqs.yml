@@ -18,9 +18,9 @@
 - name: "Enable Homebrew Casks"
   homebrew_cask: name="{{ item }}"
   with_items:
-    - java
-	- vagrant
-	- virtualbox
+  - java
+  - vagrant
+  - virtualbox
   when: ansible_distribution == 'MacOSX'
   
 - name: "Install packages"
