@@ -1,0 +1,36 @@
+---
+# Ansible managed: /Users/hagzag/projects/shelleg/swarm-cd/site-roles/cluster-init/templates/servers.yml.j2 modified on 2016-08-29 23:51:40 by hagzag on hagzags-mac
+# Do not edit manually unless you know what your doing ;)
+
+- name: cicd-manager
+  box: ubuntu/trusty64
+  ram: 1024
+  ip:  172.16.1.111
+  
+- name: cicd-node
+  box: ubuntu/trusty64
+  ram: 1024
+  ip:  172.16.1.112
+  
+- name: cicd-replica
+  box: ubuntu/trusty64
+  ram: 1024
+  ip:  172.16.1.113
+  
+
+# e.g output:
+# - name: cicd-manager
+#   box: ubuntu/trusty64
+#   ram: 1024
+#   ip: 172.16.1.111
+#
+# - name: cicd-node
+#   box: ubuntu/trusty64
+#   ram: 1024
+#   ip: 172.16.1.112
+#
+# - name: cicd-replica
+#   box: ubuntu/trusty64
+#   ram: 1024
+#   ip: 172.16.1.113
+#
