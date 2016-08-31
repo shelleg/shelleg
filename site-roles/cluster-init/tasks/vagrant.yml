@@ -1,11 +1,12 @@
 ---
-- name: "Create / Verify {{ default_vagrant_dir }}"
-  file: name="{{ default_vagrant_dir }}" state=directory
+
+- name: "Create / Verify {{ default.vagrant_dir }}"
+  file: name="{{ default.vagrant_dir }}" state=directory
 
 - name: "Generate Vagrant run-time configurations"
   template:
     src: "{{ item }}.j2"
-    dest: "{{ default_vagrant_dir }}/{{ item }}"
+    dest: "{{ default.vagrant_dir }}/{{ item }}"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
   with_items:
@@ -18,7 +19,7 @@
 - name: "Generate global inventory file"
   template:
     src: inventory.j2
-    dest: "{{ default_vagrant_dir }}/../inventories/inventory"
+    dest: "{{ default.vagrant_dir }}/../inventories/inventory"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
   tags:
@@ -29,41 +30,28 @@
 - name: "Destroy vagrant boxes"
   command: "vagrant destroy -f"
   args:
-      chdir: "{{ default_vagrant_dir }}"
+      chdir: "{{ default.vagrant_dir }}"
   when: (clean is defined) or (force is defined)
 
 - name: "Create vagrant boxes"
   command: "vagrant up --provision"
   args:
-      chdir: "{{ default_vagrant_dir }}"
-  when: clean is undefined
+      chdir: "{{ default.vagrant_dir }}"
+  when: clean is undefined or skip_create is defined
 
+- debug: msg=manager_key
+  tags:
+    - ah
 
-#- add_host: name="{{ item.cname }}"
-#            ansible_ssh_host="{{ item.cname }}"
-#            ansible_ssh_port="{{ item.port }}"
-#            ansible_ssh_user="{{ item.user }}"
-#            ansible_ssh_pass="{{ item.pass }}"
-#            ansible_ssh_key="{{ default_vagrant_dir }}/.vagrant/machines/{{ default_prefix }}-{{ host.cname }}/virtualbox/private_key"
-#            groups=swarm-cluster-nodes
-#  with_items:
-#    - "{{ cicd.hosts }}"
-
-#            ansible_ssh_pass="{{ item.pass }}"
-
-#- name: Fire up a set of vagrant instances to log into
-#  local_action: vagrant
-#    state=present
-#    box_name="{{ cicd_hosts_manager.cname }}"
-#    box_path="{{ cicd_hosts_manager.box }}"
-#    vm_name="{{ cicd_hosts_manager.cname }}"
-#    count=1
-#  register: vagrant
-##  with_items: "{{ cicd.hosts }}"
-##      state=present
-##      box_name="{{ item.box }}"
-##      box_path="{{ item.box }}"
-##      vm_name="{{ item.cname }}"
-##      count=1
-##  register: vagrant
-##  with_items: "{{ cicd.hosts }}"  box_name="{{ item.box }}"
+- add_host:
+    name: "{{ default.prefix }}-{{ item.cname }}"
+    ansible_host: "{{ item.ip }}"
+    ansible_port: "{{ item.ssh_port }}"
+    ansible_user: "{{ item.user }}"
+#    ansible_ssh_pass: "{{ item.pass }}"
+    ansible_ssh_private_key_file: "{{ default.vagrant_dir }}/.vagrant/machines/{{ default.prefix }}-{{ item.cname }}/virtualbox/private_key"
+    groups: "{{ default.group_name }}"
+  with_items:
+  - "{{ cicd.hosts }}"
+  tags:
+  - ah

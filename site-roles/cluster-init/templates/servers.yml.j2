@@ -3,7 +3,7 @@
 # Do not edit manually unless you know what your doing ;)
 
 {% for host in cicd.hosts %}
-- name: {{ default_prefix }}-{{ host.cname }}
+- name: {{ default.prefix }}-{{ host.cname }}
   box: {{ host.box }}
   ram: {{ host.ram }}
   ip:  {{ host.ip }}

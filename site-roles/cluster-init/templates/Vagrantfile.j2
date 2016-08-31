@@ -8,29 +8,11 @@ ansible_verbosity = '-vvv'
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
-
-vagrant_dir 	= File.expand_path(File.dirname(__FILE__))
-g_roles_dir     = File.expand_path(File.dirname(__FILE__)) + '/../galaxy-roles'
-s_roles_dir     = File.expand_path(File.dirname(__FILE__)) + '/../site-roles'
-ansible_vars    = "{{ playbook_dir }}" + "/../group_vars/all"
-puts "#{ansible_vars}/00_general"
-# This example shows how Vagrant variables can be loaded from Ansible's variables,
-# and a demonstration of using the DEFAULTS, which will be called automatically
-# when running from `deploy.sh vagrant`.
-# It makes sure that configuration will only be done in one place,
-# Follow this method on future changes to this file.
-# CONF_GENERAL = YAML.load( File.open( ansible_vars + '/' + '00_general', File::RDONLY ).read )
-
 # Require YAML module
 require 'yaml'
 
 # Read YAML file with box details
 servers = YAML.load_file('servers.yml')
-
-# Check to see ansible role directories are populated ..
-if Dir["#{g_roles_dir}/*"].empty? && Dir["#{s_roles_dir}/*"].empty?
-  abort('no roles to execute aborting ,,, [ hint: ansible-galaxy -r requirements.yml should help :) ]')
-end
 
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
