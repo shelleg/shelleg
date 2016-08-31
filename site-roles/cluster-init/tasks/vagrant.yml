@@ -13,8 +13,6 @@
     - servers.yml
     - inventory
     - Vagrantfile
-  tags:
-  - conf
 
 - name: "Generate global inventory file"
   template:
@@ -24,8 +22,6 @@
     group: "{{ ansible_user_gid }}"
   tags:
   - conf
-
-- debug: var=cicd
 
 - name: "Destroy vagrant boxes"
   command: "vagrant destroy -f"
@@ -39,10 +35,6 @@
       chdir: "{{ default.vagrant_dir }}"
   when: clean is undefined or skip_create is defined
 
-- debug: msg=manager_key
-  tags:
-    - ah
-
 - add_host:
     name: "{{ default.prefix }}-{{ item.cname }}"
     ansible_host: "{{ item.ip }}"
@@ -53,5 +45,3 @@
     groups: "{{ default.group_name }}"
   with_items:
   - "{{ cicd.hosts }}"
-  tags:
-  - ah
