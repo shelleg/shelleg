@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+# Do not edit manually unless you know what your doing ;) 
+
+# example output:
+# [cicd-manager]
+# 172.16.1.111  private_ip=172.16.1.111 ansible_ssh_user=ubuntu
+
+{% for host in cicd.hosts %}
+[{{ default.prefix }}-{{ host.cname }}]
+{{ host.ip }} private_ip={{ host.ip }} ansible_ssh_user="{{ host.user }}"
+
+{% endfor %}

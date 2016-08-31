@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  #become: yes
+  #become_user: root
+  #gather_facts: no
+  pre_tasks:   # Chiken & Egg ...
+    - name: "Install ansible requirements"
+      pip:
+        name: "python-vagrant"
+        state: present
+      tags:
+        - vagrant
+      when: (vagrant is defined) and (aws is undefined)
+
+  vars:
+    vagrant: true
+  roles:
+    - { role: ../site-roles/cluster-init }
+    #- { role: ../site-roles/ }
+    #- { role: ../site-roles/ }
+    #- { role: ../site-roles/ }
+    #- { role: ../site-roles/ }
+- hosts: cicd-manager
+  become: yes
+  become_user: root 
+  tasks:
+    - name: 'say somthing im giving up on you'
+      debug: var=playbook_dir
