@@ -1,7 +1,9 @@
+---
+
 default:
   user: vagrant
   pass: vagrant
-  box: "ubuntu/trusty64"
+  box: "geerlingguy/ubuntu1604"
   net_prefix: "172.16.1"
   prefix: "cicd"
   ram: 512
