@@ -1,0 +1,5 @@
+---
+# defaults file for slack-notify-ansible-role
+
+slack_notify: true
+#slack_token: - you probebly wnat this in group_vars

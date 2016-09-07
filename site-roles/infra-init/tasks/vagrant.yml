@@ -1,4 +1,5 @@
 ---
+# tasks file for ansible-role-infra-init
 
 - name: "Create / Verify {{ shelleg.vagrant_dir }}"
   file: name="{{ shelleg.vagrant_dir }}" state=directory
@@ -29,30 +30,17 @@
       chdir: "{{ shelleg.vagrant_dir }}"
   when: (clean is defined) or (force is defined)
 
-- name: "Create vagrant boxes"
-  command: "vagrant up --provision"
-  args:
-      chdir: "{{ shelleg.vagrant_dir }}"
-  when: clean is undefined or skip_create is defined
+- name: "Infra hosts creation"
+  include: vagrant-infra.yml
+  when: (create_infra is defined) or
+        (create_infra is defined and create_all is defined)
 
-- name: "Add infra nodes to Ansible inventory"
-  add_host:
-    name: "{{ shelleg.prefix }}-{{ item.cname }}"
-    ansible_host: "{{ item.ip }}"
-    ansible_port: "{{ item.ssh_port }}"
-    ansible_user: "{{ item.user }}"
-    ansible_ssh_private_key_file: "{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ item.cname }}/virtualbox/private_key"
-    groups: "{{ shelleg_hosts.infra_group_name }}"
-  with_items:
-  - "{{ shelleg_hosts.infra }}"
+- name: "Swarm hosts creation"
+  include: vagrant-swarm.yml
+  when: (create_swarm is defined) or
+        (create_swarm is defined and create_all is defined)
 
-- name: "Add swarm nodes to Ansible inventory"
-  add_host:
-    name: "{{ shelleg.prefix }}-{{ item.cname }}"
-    ansible_host: "{{ item.ip }}"
-    ansible_port: "{{ item.ssh_port }}"
-    ansible_user: "{{ item.user }}"
-    ansible_ssh_private_key_file: "{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ item.cname }}/virtualbox/private_key"
-    groups: "{{ shelleg_hosts.swarm_group_name }}"
-  with_items:
-  - "{{ shelleg_hosts.swarm }}"
+
+
+
+

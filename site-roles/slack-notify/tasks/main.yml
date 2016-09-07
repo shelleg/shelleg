@@ -1,0 +1,9 @@
+---
+# tasks file for slack-notify-ansible-role
+
+- name: lets slack-it
+  slack:
+    token: "{{ slack.token }}"
+    msg: "{{ inventory_hostname }} is alive!"
+    username: "Ansible on {{ inventory_hostname }}"
+  when: slack_notify is defined

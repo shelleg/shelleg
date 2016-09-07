@@ -1,0 +1,6 @@
+---
+# tasks file for shelleg-common
+
+- name: "Set instance hostname"
+  hostname:
+    name: "{{ inventory_hostname }}"

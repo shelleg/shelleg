@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  vars:
+    create_all: true
+    vagrant: true
+#    aws: true
+#    skip_create: true
+  roles:
+    - role: infra-init
+
+- hosts: shelleg-infra-instances
+  become: yes
+  become_user: root
+  pre_tasks:
+    - debug: msg="Install stuff on all infra instances"
+  roles:
+    - role: shelleg-common
+    - role: docker-host
+
+- hosts: shelleg-swarm-instances
+  become: yes
+  become_user: root
+  pre_tasks:
+    - debug: msg="Install stuff on all swarm instances"
+  roles:
+    - role: shelleg-common
+    - role: docker-host
+    - role: docker-swarm
+
+- hosts: all:!localhost
+  become: yes
+  become_user: root
+  pre_tasks:
+    - debug: msg="Do stuff on all instances except localhost"
+  roles:
+    -  role: slack-notify

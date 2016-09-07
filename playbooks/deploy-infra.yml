@@ -1,7 +1,19 @@
 ---
+- hosts: localhost
+  vars:
+    create_infra: true
+    vagrant: true
+  roles:
+    -  role: infra-init
+
 - hosts: shelleg-infra01
   become: yes
   become_user: root
+  pre_tasks:
+    - debug: msg="Instantiate infrustructure on {{ inventory_hostname }}"
+  vars:
+    - create_infra: true
   roles:
-    - { role: docker-dnsmasq }
-    - { role: docker-ntp }
+    - role: shelleg-common
+    - role: docker-dnsmasq
+    - role: docker-ntp

@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
   pre_tasks:
+     - debug: msg="Install stuff on {{ inventory_hostname }}"
      - name: "Get roles from galaxy / github via {{ playbook_dir }}/../requirements.yml"
        command: ansible-galaxy install -r {{ playbook_dir }}/../requirements.yml
