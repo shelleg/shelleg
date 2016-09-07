@@ -9,19 +9,15 @@
 # - name: "Generate inventory file for ansible to use ..."
 #   template: src=swarm-cluster-inventory-file.j2 dest=/tmp/swarm-cluster owner=hagzag group=staff mode=0755
 
-#- debug: var=
+- debug: var=shelleg
 
 - name:
   include: vagrant.yml
   when: (vagrant is defined) and (aws is undefined)
 
-- name:
-  include: aws.yml
-  when: (aws is defined) and (vagrant is undefined)
+#- name:
+#  include: aws.yml
+#  when: (aws is defined) and (vagrant is undefined)
 
-- name: 
-  include: install-reqs.yml
-  when: install_reqs is defined
-  
   
 

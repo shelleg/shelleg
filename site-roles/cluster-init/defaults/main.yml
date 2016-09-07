@@ -1,2 +1,5 @@
 ---
 # defaults file for cluster-init
+
+# docker_driver: virtualbox
+slack_notify: false

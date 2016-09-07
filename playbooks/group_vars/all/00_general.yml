@@ -1,0 +1,12 @@
+---
+# general vars - everything we might use in context of shelleg
+shelleg:
+  user: vagrant
+  pass: vagrant
+  box: "geerlingguy/ubuntu1604"
+  net_prefix: "172.16.1"
+  prefix: shelleg
+  ram: 512
+  port: 22
+  vagrant_dir: "{{ playbook_dir }}/../vagrant"
+

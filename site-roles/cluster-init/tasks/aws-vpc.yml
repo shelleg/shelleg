@@ -1,0 +1,31 @@
+---
+
+- name: Create aws VPC
+  local_action:
+    module: ec2_vpc
+    region: "{{ vpc.region }}"
+    state: present
+    cidr_block: "{{ vpc.cidr_block }}"
+    resource_tags: { "Name":"{{ vpc.name }}-vpc" }
+    subnets: "{{ vpc_subnets }}"
+    internet_gateway: yes
+    route_tables: "{{ public_subnet_rt }}"
+  register: vpc
+
+- name: "Dump vpc.vpc_id to file"
+  shell: echo "{{ vpc.vpc_id }}" > "{{ vpc.name }}-vpc.yml"
+  args:
+    chdir: vars
+
+- name: VPC ->  Write subnets id to files
+  shell: echo "{{ item.id }}" > "{{ item.resource_tags.Name }}.yml"
+  args:
+    chdir: vars/
+  with_items: "{{ vpc.subnets }}"
+
+- name: "Set the subnet id's as facts"
+  set_fact:
+    vpc_id: "{{ lookup('file', 'vars/' + vpc.name + '-vpc.yml') }}"
+    public_subnet_1: "{{ lookup('file', 'vars/' + vpc_name + '-' + public_az_1 + '-public-subnet.yml') }}"
+    public_subnet_2: "{{ lookup('file', 'vars/' + vpc_name + '-' + public_az_2 + '-public-subnet.yml') }}"
+    #private_subnet: "{{ lookup('file', 'vars/' + vpc_name + '-' + private_az + '-private-subnet.yml') }}"

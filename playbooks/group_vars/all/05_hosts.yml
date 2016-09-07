@@ -1,0 +1,38 @@
+---
+shelleg_hosts:
+  infra_group_name: shelleg-infra-instances
+  infra:
+    - { cname: "infra01",
+        user: "{{ shelleg.user }}",
+        pass: "{{ shelleg.pass }}",
+        box: "{{ shelleg.box }}",
+        ip: "{{ shelleg.net_prefix }}.110",
+        ssh_port: "{{ shelleg.port }}",
+        ram: "{{ shelleg.ram }}"
+      }
+  swarm_group_name: shelleg-swarm-instances
+  swarm:
+  - { cname: "manager1",
+      user: "{{ shelleg.user }}",
+      pass: "{{ shelleg.pass }}",
+      box: "{{ shelleg.box }}",
+      ip: "{{ shelleg.net_prefix }}.111",
+      ssh_port: "{{ shelleg.port }}",
+      ram: "{{ shelleg.ram }}"
+    }
+  - { cname: "worker1",
+      user: "{{ shelleg.user }}",
+      pass: "{{ shelleg.pass }}",
+      box: "{{ shelleg.box }}",
+      ip: "{{ shelleg.net_prefix }}.112",
+      ssh_port: "{{ shelleg.port }}",
+      ram: "{{ shelleg.ram }}"
+    }
+  - { cname: "worker2",
+      user: "{{ shelleg.user }}",
+      pass: "{{ shelleg.pass }}",
+      box: "{{ shelleg.box }}",
+      ip: "{{ shelleg.net_prefix }}.113",
+      ssh_port: "{{ shelleg.port }}",
+      ram: "{{ shelleg.ram }}"
+      }
