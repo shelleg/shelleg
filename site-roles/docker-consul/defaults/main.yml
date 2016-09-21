@@ -1,0 +1,8 @@
+---
+# defaults file for consul-docker-ansible-role
+consul_port: 8500
+consul_service_name: consul
+#consul_leader_name: consul
+#consul_leader_hostname: "{{ consul_leader_name }}"
+consul_container_prefix: progrium/consul
+consul_container_tag: latest

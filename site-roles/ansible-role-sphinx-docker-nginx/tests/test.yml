@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - tutorial-deployer
+    - ansible-role-sphinx-docker-nginx

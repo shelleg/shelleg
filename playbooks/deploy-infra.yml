@@ -3,17 +3,37 @@
   vars:
     create_infra: true
     vagrant: true
+    skip_create: true
   roles:
     -  role: infra-init
+
+- hosts: all!localhost
+  roles:
+    - role: shelleg-common
 
 - hosts: shelleg-infra01
   become: yes
   become_user: root
-  pre_tasks:
-    - debug: msg="Instantiate infrustructure on {{ inventory_hostname }}"
-  vars:
-    - create_infra: true
   roles:
-    - role: shelleg-common
+    - role: docker-host
+  tasks:
+    - name: "pull Docker Images Instead of downloading in realtime"
+      docker_image:
+        name: "{{ item.name }}:{{ item.tag }}"
+      with_items: "{{ docker_images }}"
+
+- hosts: shelleg-infra01
+  become: yes
+  become_user: root
+  roles:
     - role: docker-dnsmasq
     - role: docker-ntp
+    - role: docker-apt-cacher-ng
+#    - role: docker-consul
+#    - role: docker-registry
+
+- hosts: shelleg-infra02
+  become: yes
+  become_user: root
+  roles:
+    - role: docker-apt-cacher-ng

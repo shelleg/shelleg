@@ -22,3 +22,10 @@ Once we are done for a kickstart you will need to:
 5. Test the app lets run zulip via compose -> https://github.com/galexrt/docker-zulip/blob/master/docker-compose.yml 
 
 To definitely be continued ... 
+
+
+```
+cd shelleg
+ansible-playbook playbooks/get-deps.yml
+ansible-playbook playbooks/deploy-infra.yml
+```

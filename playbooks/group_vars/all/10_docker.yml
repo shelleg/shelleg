@@ -2,7 +2,12 @@
 # docker related vars
 docker_bridge_cidr: "172.17.1.0/24"
 docker_dns: "--dns=194.90.1.5 --dns=8.8.8.8"
-docker_keyserver: hkp://p80.pool.sks-keyservers.net:80
 docker_registry: false
 docker_registry_mirror: "http://{{ shelleg_hosts.swarm[0].ip }}:5000"
+docker_images:
+  - { name: "shelleg/ntpd-ubuntu",    tag: "latest" }
+  - { name: "shelleg/dnsmasq-centos", tag: "latest" }
+  - { name: "registry",               tag: "2" }
+  - { name: "progrium/consul",        tag: "latest" }
+  - { name: "manomarks/visualizer",   tag: "latest" }
 

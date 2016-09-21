@@ -5,34 +5,47 @@ shelleg_hosts:
     - { cname: "infra01",
         user: "{{ shelleg.user }}",
         pass: "{{ shelleg.pass }}",
-        box: "{{ shelleg.box }}",
+        box: "{{ shelleg.ubuntu.box }}",
         ip: "{{ shelleg.net_prefix }}.110",
         ssh_port: "{{ shelleg.port }}",
-        ram: "{{ shelleg.ram }}"
+        ram: "{{ shelleg.ram_infra }}",
+        consul_leader: "true"
+      }
+    - { cname: "infra02",
+        user: "{{ shelleg.user }}",
+        pass: "{{ shelleg.pass }}",
+        box: "{{ shelleg.centos.box }}",
+        ip: "{{ shelleg.net_prefix }}.109",
+        ssh_port: "{{ shelleg.port }}",
+        ram: "{{ shelleg.ram_infra }}",
+        consul_leader: "true"
       }
   swarm_group_name: shelleg-swarm-instances
   swarm:
   - { cname: "manager1",
       user: "{{ shelleg.user }}",
       pass: "{{ shelleg.pass }}",
-      box: "{{ shelleg.box }}",
+      box: "{{ shelleg.centos.box }}",
       ip: "{{ shelleg.net_prefix }}.111",
       ssh_port: "{{ shelleg.port }}",
-      ram: "{{ shelleg.ram }}"
+      ram: "{{ shelleg.ram }}",
+      consul_member: "true"
     }
   - { cname: "worker1",
       user: "{{ shelleg.user }}",
       pass: "{{ shelleg.pass }}",
-      box: "{{ shelleg.box }}",
+      box: "{{ shelleg.ubuntu.box }}",
       ip: "{{ shelleg.net_prefix }}.112",
       ssh_port: "{{ shelleg.port }}",
-      ram: "{{ shelleg.ram }}"
+      ram: "{{ shelleg.ram }}",
+      consul_member: "true"
     }
-  - { cname: "worker2",
-      user: "{{ shelleg.user }}",
-      pass: "{{ shelleg.pass }}",
-      box: "{{ shelleg.box }}",
-      ip: "{{ shelleg.net_prefix }}.113",
-      ssh_port: "{{ shelleg.port }}",
-      ram: "{{ shelleg.ram }}"
-      }
+#  - { cname: "worker2",
+#      user: "{{ shelleg.user }}",
+#      pass: "{{ shelleg.pass }}",
+#      box: "{{ shelleg.centos.box }}",
+#      ip: "{{ shelleg.net_prefix }}.113",
+#      ssh_port: "{{ shelleg.port }}",
+#      ram: "{{ shelleg.ram }}",
+#      consul_member: true
+#      }

@@ -1,6 +1,9 @@
 ---
 # tasks file for shelleg-common
 
-- name: "Set instance hostname"
-  hostname:
-    name: "{{ inventory_hostname }}"
+#- name: "Set instance hostname"
+#  hostname:
+#    name: "{{ inventory_hostname }}"
+
+- name: "Check internet mode"
+  include: "connectivity.yml"

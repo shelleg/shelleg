@@ -1,0 +1,66 @@
+---
+# tasks file for ansible-role-docker-host
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "Install requirements"
+  apt: name="{{ item }}" update_cache=yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: "Add apt key of the latest repo with docker 1.2"
+  apt_key: keyserver="{{ docker_keyserver }}" id="{{ docker_repo_key }}"
+
+- name: "Add repository"
+  apt_repository: repo='deb {{ docker_repo }} ubuntu-{{ ansible_distribution_release }} main' state=present
+
+- name: "Purge unnedded packadges"
+  apt: name="{{ item }}" state=absent purge=yes
+  with_items:
+    - lxc-docker
+
+- name: "Verify that apt is pulling from the right repository"
+  command: apt-cache policy docker-engine
+
+- name: "Update apt cache for new repo to kick in"
+  apt: update_cache=yes
+
+- name: "Install docker + reqs"
+  apt: name="{{ item }}" update_cache=yes state=latest
+  with_items:
+    - docker-engine
+    - linux-image-extra-*
+    - python-pip
+  tags:
+  - apt
+
+- name: "Enable the Docker daemon as a service and start it."
+  service:
+    name: docker.service
+    state: started
+    enabled: yes
+
+- name: "Install docker-py"
+  pip: name=docker-py state=present version=1.7.0
+  tags:
+    - pip
+
+#- name: "Configure Docker defults"
+#  template:
+#    src: etc-default-docker.j2
+#    dest: "/etc/default/docker"
+#    owner: root
+#    group: root
+#  tags:
+#  - confDocker
+
+- name: Set docker daemon options
+  copy:
+    content: "DOCKER_OPTS=\"{{ docker_opts.rstrip('\n') }}\""
+    dest: /etc/default/docker
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker

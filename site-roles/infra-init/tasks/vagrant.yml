@@ -28,17 +28,16 @@
   command: "vagrant destroy -f"
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
-  when: (clean is defined) or (force is defined)
+  when: (clean is defined) or
+        (force is defined)
 
 - name: "Infra hosts creation"
   include: vagrant-infra.yml
-  when: (create_infra is defined) or
-        (create_infra is defined and create_all is defined)
+  when: (create_infra is defined)
 
 - name: "Swarm hosts creation"
   include: vagrant-swarm.yml
-  when: (create_swarm is defined) or
-        (create_swarm is defined and create_all is defined)
+  when: (create_swarm is defined)
 
 
 

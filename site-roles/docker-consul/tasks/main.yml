@@ -1,0 +1,46 @@
+---
+- fail: "msg=\"This role requires shelleg context - read more at http:// url to docs\""
+  when: "shelleg is undefined"
+
+- fail: "msg=\"This role requires shelleg context - read more at http:// url to docs\""
+  when: "shelleg_hosts is undefined"
+
+- debug: var=shelleg_hosts.infra
+- debug: var=item.consul_leader
+  with_items:
+    - "{{ shelleg_hosts.infra }}"
+
+- name: "set consul leader facts"
+  set_fact:
+    consul_leader_hostname: "{{ shelleg.prefix }}-{{ item.cname }}-{{ consul_service_name }}"
+    consul_leader_ip: "{{ item.ip }}"
+  when: "(internet_available == true) and ('{{ item.consul_leader }}' != '')"
+  with_items:
+    - "{{ shelleg_hosts.infra }}"
+
+- debug: var=consul_leader_ip
+- debug: var=consul_leader_hostname
+- debug: var=ansible_docker0.ipv4.address
+
+- docker_container:
+    hostname: "{{ consul_leader_hostname }}"
+    image: "{{ consul_container_prefix }}"
+    name: "{{ consul_leader_hostname }}"
+    ports:
+      - "{{ consul_leader_ip }}:8300:8300"
+      - "{{ consul_leader_ip }}:8301:8301"
+      - "{{ consul_leader_ip }}:8301:8301/udp"
+      - "{{ consul_leader_ip }}:8302:8302"
+      - "{{ consul_leader_ip }}:8302:8302/udp"
+      - "{{ consul_leader_ip }}:8400:8400"
+      - "{{ consul_leader_ip }}:{{ consul_port }}:{{ consul_port }}"
+      - "{{ consul_leader_ip }}:8600:53"
+      - "{{ consul_leader_ip }}:8600:53/udp"
+    restart: true
+    state: started
+    command: -server -advertise {{ consul_leader_ip }} -bootstrap-expect 1 -domain {{ shelleg.domain_name }}
+  name: "Run Docker consul leader container ..."
+  register: consul_leader_output
+  tags:
+    - consul
+  when: "{{ consul_leader_ip is defined }}"

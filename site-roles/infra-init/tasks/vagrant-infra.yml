@@ -1,22 +1,41 @@
 ---
 # tasks file for ansible-role-infra-init
+#
+#- command: "ping {{ item.ip }} -c 4"
+#  ignore_errors: true
+#  register: "ping_stat"
+#  with_items:
+#    - "{{ shelleg_hosts.infra }}"
+#
+#- debug: var="ping_stat.results"
 
 - name: "Create infra vagrant boxes"
-  command: "vagrant up"
+  command: "vagrant up {{ shelleg.prefix }}-{{ item.cname }}"
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
   with_items:
-  - "{{ shelleg_hosts.infra }}"
-  when: clean is undefined or skip_create is defined
+    - "{{ shelleg_hosts.infra }}"
+  when: (clean is undefined) or
+        (skip_create is defined)
 
 - name: "Add infra nodes to Ansible inventory"
   add_host:
-    name: "{{ shelleg.prefix }}-{{ item.cname }}"
+    # ansible args
     ansible_host: "{{ item.ip }}"
     ansible_port: "{{ item.ssh_port }}"
     ansible_user: "{{ item.user }}"
+    # extra args
+    name: "{{ shelleg.prefix }}-{{ item.cname }}"
+    cname: "{{ shelleg.prefix }}-{{ item.cname }}"
+    user: "{{ item.user }}"
+    pass: "{{ item.pass }}"
+    box: "{{ item.box }}"
+    ip: "{{ item.ip }}"
+    ram: "{{ item.ram }}"
+    ssh_port: "{{ item.ssh_port }}"
     ansible_ssh_private_key_file: "{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ item.cname }}/virtualbox/private_key"
+    # hot groups
     groups: "{{ shelleg_hosts.infra_group_name }}"
   with_items:
-  - "{{ shelleg_hosts.infra }}"
+    - "{{ shelleg_hosts.infra }}"
 

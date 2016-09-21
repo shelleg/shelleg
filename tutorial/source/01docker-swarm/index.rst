@@ -1,5 +1,5 @@
-Docke Swarm Tutorial
-====================
+Docker Swarm Tutorial
+=====================
 
 Introduce Arcitectual overview
 ##############################

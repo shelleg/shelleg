@@ -12,11 +12,6 @@
   - vim
   - libjpeg-dev
   - make
-#  - nginx
-
-#- name: "Create VirtualEnv"
-#  virtualenv: dest=
-#  shell: . /etc/bash_completion.d/virtualenvwrapper && mkvirtualenv {{ tutorial_virtualenv }}
 
 - name: "Create dir"
   file: path="{{ item }}" state=directory
@@ -40,13 +35,6 @@
   args:
     executable: /bin/bash
     chdir: "{{ tutorial_remote_srcdir }}"
-
-## only from Ansible 2.0 ...
-#- name: Copy files from foo to bar
-#  copy: remote_src=True src="{{ tutorial_remote_srcdir }}/build/html/" dest="{{ tutorial_wwwdir }}/"
-#
-#- name: "clenup source dir"
-#  file: path="{{ tutorial_remote_srcdir }}" state=absent
 
 # docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
 - name: "Run Docker nginx container ..."

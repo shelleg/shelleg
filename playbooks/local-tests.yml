@@ -1,0 +1,11 @@
+---
+- hosts: shelleg-infra01
+  become: true
+  tasks:
+    - debug: var=inventory_hostname
+    - debug: msg="{{ shelleg.prefix }}-{{ shelleg_hosts.infra[0].cname }}"
+- hosts: shelleg-infra02
+  become: true
+  tasks:
+    - debug: var=inventory_hostname
+    - debug: msg="{{ shelleg.prefix }}-{{ shelleg_hosts.infra[0].cname }}"

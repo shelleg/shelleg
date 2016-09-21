@@ -5,23 +5,23 @@ Choose your poizen:
 -------------------
 vbx - short for Virtualbox ;)
 
-aws
+aws - Amazon Web Services
 
 
 What we need ?
 --------------
 
-1-2 base machines which provide:
---------------------------------
+1 or more base machines which provide:
+-------------------------------------
 
 - Network time
 - Domain Name Resolution
 - Service Discovery service - for our Swarm cluster to connect to
 
-3 or more swrm nodes
---------------------
+3 or more sdocker warm nodes
+----------------------------
 
 - Register against consul cluster
 - Resolve against DNS services
-- Resolce service anemes via DNS interface
+- Resolve service names via DNS interface
 

@@ -1,6 +1,5 @@
 ---
 ### see REFERENCE Below as needed 
-
 - src: https://github.com/shelleg/ansible-role-docker-ntp.git
   version: master
   name: docker-ntp
@@ -8,6 +7,41 @@
 - src: https://github.com/shelleg/ansible-role-docker-dnsmasq.git
   version: master
   name: docker-dnsmasq
+
+- src: https://github.com/fupelaqu/ansible-docker-registry.git
+  version: master
+  name: docker-registry
+
+### REFERENCE ###
+##  DO NOT REOMVE - use as reference ...
+ # from galaxy
+ #- src: yatesr.timezone
+
+ # from GitHub
+ #- src: https://github.com/bennojoy/nginx
+
+ # from GitHub, overriding the name and specifying a specific tag
+ #- src: https://github.com/bennojoy/nginx
+ #  version: master
+ #  name: nginx_role
+
+ # from a webserver, where the role is packaged in a tar.gz
+ #- src: https://some.webserver.example.com/files/master.tar.gz
+ #  name: http-role
+
+ # from Bitbucket
+ #- src: git+http://bitbucket.org/willthames/git-ansible-galaxy
+ #  version: v1.4
+
+ # from Bitbucket, alternative syntax and caveats
+ #- src: http://bitbucket.org/willthames/hg-ansible-galaxy
+ #  scm: hg
+
+ # from GitLab or other git-based scm
+ #- src: git@gitlab.company.com:mygroup/ansible-base.git
+ #  scm: git
+ #  version: 0.1.0
+
 ### REFERENCE ###
 ##  DO NOT REOMVE - use as reference ...
  # from galaxy

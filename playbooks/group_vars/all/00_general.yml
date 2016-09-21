@@ -3,10 +3,19 @@
 shelleg:
   user: vagrant
   pass: vagrant
-  box: "geerlingguy/ubuntu1604"
+  ubuntu:
+    box: "geerlingguy/ubuntu1604"
+  centos:
+    box: "centos/7"
   net_prefix: "172.16.1"
   prefix: shelleg
   ram: 512
+  ram_infra: 1024
   port: 22
   vagrant_dir: "{{ playbook_dir }}/../vagrant"
-
+  domain_name: shelleg.local
+  dns_searches:
+    - shelleg.local
+  dns:
+    primary: 8.8.8.8
+    secondary: 8.8.4.4
