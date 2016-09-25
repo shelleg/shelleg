@@ -13,8 +13,8 @@
   command: "vagrant up {{ shelleg.prefix }}-{{ item.cname }}"
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
-  with_items:
-    - "{{ shelleg_hosts.infra }}"
+  with_items: 
+    - "{{ shelleg_hosts.infra }}" #DORON: I do not see where item is used in this task
   when: (clean is undefined) or
         (skip_create is defined)
 

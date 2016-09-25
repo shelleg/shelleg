@@ -25,7 +25,7 @@ shelleg_hosts:
   - { cname: "manager1",
       user: "{{ shelleg.user }}",
       pass: "{{ shelleg.pass }}",
-      box: "{{ shelleg.centos.box }}",
+      box: "{{ shelleg.ubuntu.box }}",
       ip: "{{ shelleg.net_prefix }}.111",
       ssh_port: "{{ shelleg.port }}",
       ram: "{{ shelleg.ram }}",
@@ -40,12 +40,12 @@ shelleg_hosts:
       ram: "{{ shelleg.ram }}",
       consul_member: "true"
     }
-#  - { cname: "worker2",
-#      user: "{{ shelleg.user }}",
-#      pass: "{{ shelleg.pass }}",
-#      box: "{{ shelleg.centos.box }}",
-#      ip: "{{ shelleg.net_prefix }}.113",
-#      ssh_port: "{{ shelleg.port }}",
-#      ram: "{{ shelleg.ram }}",
-#      consul_member: true
-#      }
+  - { cname: "worker2",
+      user: "{{ shelleg.user }}",
+      pass: "{{ shelleg.pass }}",
+      box: "{{ shelleg.ubuntu.box }}",
+      ip: "{{ shelleg.net_prefix }}.113",
+      ssh_port: "{{ shelleg.port }}",
+      ram: "{{ shelleg.ram }}",
+      consul_member: true
+      }
