@@ -1,0 +1,5 @@
+---
+# Join worker to swarm
+- name: Join Worker to swarm Leader
+  shell: docker swarm join --token {{ swarmToken }} {{ shelleg_hosts.swarm.swarm_managers[0].ip }}:2377
+

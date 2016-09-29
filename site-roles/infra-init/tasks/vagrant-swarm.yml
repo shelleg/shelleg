@@ -1,15 +1,15 @@
 ---
 # tasks file for ansible-role-infra-init
 
-- name: "Create swarm vagrant boxes"
+- name: "Create swarm managers vagrant boxes"
   command: "vagrant up {{ shelleg.prefix }}-{{ item.cname }}"
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
   with_items:
-  - "{{ shelleg_hosts.swarm }}"
-  when: clean is undefined or skip_create is defined
+  - "{{ shelleg_hosts.swarm.swarm_managers }}"
+  when: (clean is undefined) or (skip_create == false)
 
-- name: "Add swarm nodes to Ansible inventory"
+- name: "Add swarm managers to Ansible inventory"
   add_host:
     # ansible args
     ansible_host: "{{ item.ip }}"
@@ -26,6 +26,35 @@
     ssh_port: "{{ item.ssh_port }}"
     ansible_ssh_private_key_file: "{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ item.cname }}/virtualbox/private_key"
     # hot groups
-    groups: "{{ shelleg_hosts.infra_group_name }}"
+    groups: "{{ shelleg_hosts.swarm.swarm_managers_group_name }}"
   with_items:
-  - "{{ shelleg_hosts.swarm }}"
+  - "{{ shelleg_hosts.swarm.swarm_managers }}"
+
+- name: "Create swarm workers vagrant boxes"
+  command: "vagrant up {{ shelleg.prefix }}-{{ item.cname }}"
+  args:
+      chdir: "{{ shelleg.vagrant_dir }}"
+  with_items:
+  - "{{ shelleg_hosts.swarm.swarm_workers }}"
+  when: (clean is undefined) or (skip_create == false)
+
+- name: "Add swarm worker nodes to Ansible inventory"
+  add_host:
+    # ansible args
+    ansible_host: "{{ item.ip }}"
+    ansible_port: "{{ item.ssh_port }}"
+    ansible_user: "{{ item.user }}"
+    # extra args
+    name: "{{ shelleg.prefix }}-{{ item.cname }}"
+    cname: "{{ shelleg.prefix }}-{{ item.cname }}"
+    user: "{{ item.user }}"
+    pass: "{{ item.pass }}"
+    box: "{{ item.box }}"
+    ip: "{{ item.ip }}"
+    ram: "{{ item.ram }}"
+    ssh_port: "{{ item.ssh_port }}"
+    ansible_ssh_private_key_file: "{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ item.cname }}/virtualbox/private_key"
+    # hot groups
+    groups: "{{ shelleg_hosts.swarm.swarm_workers_group_name }}"
+  with_items:
+  - "{{ shelleg_hosts.swarm.swarm_workers }}"  

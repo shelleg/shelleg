@@ -10,7 +10,15 @@
 
 {% endfor %}
 
-{% for host in shelleg_hosts.swarm %}
+{% for host in shelleg_hosts.swarm.swarm_managers %}
+- name: {{ shelleg.prefix }}-{{ host.cname }}
+  box: {{ host.box }}
+  ram: {{ host.ram }}
+  ip:  {{ host.ip }}
+
+{% endfor %}
+
+{% for host in shelleg_hosts.swarm.swarm_workers %}
 - name: {{ shelleg.prefix }}-{{ host.cname }}
   box: {{ host.box }}
   ram: {{ host.ram }}

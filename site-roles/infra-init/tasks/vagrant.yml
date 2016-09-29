@@ -28,19 +28,12 @@
   command: "vagrant destroy -f"
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
-
-  when: (clean is defined) or  #DORON: Where is "defined" declared??
-        (force is defined)     #DORON: Where is "force" declared??
+  when: (clean is defined) or (force is defined) 
 
 - name: "Infra hosts creation"
   include: vagrant-infra.yml
-  when: (create_infra is defined)
+  when: create_infra == true
 
 - name: "Swarm hosts creation"
   include: vagrant-swarm.yml
-  when: (create_swarm is defined)
-
-
-
-
-
+  when: create_swarm == true

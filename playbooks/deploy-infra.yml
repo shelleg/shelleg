@@ -4,10 +4,11 @@
     create_infra: true
     vagrant: true
     skip_create: true
+    create_swarm: false
   roles:
     -  role: infra-init
 
-- hosts: all!localhost
+- hosts: shelleg-swarm-instances:shelleg-infra-instances
   roles:
     - role: shelleg-common
 
@@ -15,6 +16,7 @@
   become: yes
   become_user: root
   roles:
+    - role: apt-cacher-ng
     - role: docker-host
   tasks:
     - name: "pull Docker Images Instead of downloading in realtime"
@@ -28,12 +30,11 @@
   roles:
     - role: docker-dnsmasq
     - role: docker-ntp
-    - role: docker-apt-cacher-ng
 #    - role: docker-consul
 #    - role: docker-registry
 
-- hosts: shelleg-infra02
-  become: yes
-  become_user: root
-  roles:
-    - role: docker-apt-cacher-ng
+#- hosts: shelleg-infra02
+#  become: yes
+#  become_user: root
+#  roles:
+#    - role: docker-apt-cacher-ng

@@ -26,6 +26,8 @@
 - name: "Update apt cache for new repo to kick in"
   apt: update_cache=yes
 
+- file: path=/var/lib/dpkg/lock state=absent
+
 - name: "Install docker + reqs"
   apt: name="{{ item }}" update_cache=yes state=latest
   with_items:
@@ -46,14 +48,14 @@
   tags:
     - pip
 
-#- name: "Configure Docker defults"
-#  template:
-#    src: etc-default-docker.j2
-#    dest: "/etc/default/docker"
-#    owner: root
-#    group: root
-#  tags:
-#  - confDocker
+- name: "Configure Docker defults"
+  template:
+    src: etc-default-docker.j2
+    dest: "/etc/default/docker"
+    owner: root
+    group: root
+  tags:
+  - confDocker
 
 - name: Set docker daemon options
   copy:

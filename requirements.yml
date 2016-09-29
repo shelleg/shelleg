@@ -4,6 +4,10 @@
   version: master
   name: docker-ntp
 
+- src: https://github.com/shelleg/ansible-role-apt-cacher-ng.git
+  version: master
+  name: apt-cacher-ng
+
 - src: https://github.com/shelleg/ansible-role-docker-dnsmasq.git
   version: master
   name: docker-dnsmasq

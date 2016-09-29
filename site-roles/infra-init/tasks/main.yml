@@ -3,7 +3,7 @@
 
 - name:
   include: vagrant.yml
-  when: (vagrant is defined) and (aws is undefined)
+  when: (vagrant == true) and ((aws == false) or (aws is undefined))
 
 #- name:
 #  include: aws.yml

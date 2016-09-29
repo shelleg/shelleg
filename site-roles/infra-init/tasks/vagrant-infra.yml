@@ -14,7 +14,7 @@
   args:
       chdir: "{{ shelleg.vagrant_dir }}"
   with_items: 
-    - "{{ shelleg_hosts.infra }}" #DORON: I do not see where item is used in this task
+    - "{{ shelleg_hosts.infra }}"
   when: (clean is undefined) or
         (skip_create is defined)
 
