@@ -13,8 +13,7 @@
     - role: shelleg-common
 
 - hosts: shelleg-infra01
-  become: yes
-  become_user: root
+  become: true
   roles:
     - role: apt-cacher-ng
     - role: docker-host
