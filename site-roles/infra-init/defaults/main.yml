@@ -1,2 +1,5 @@
 ---
 # defaults file for ansible-role-infra-init
+
+create_infra: false
+create_swarm: false
