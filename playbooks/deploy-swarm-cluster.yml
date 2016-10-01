@@ -1,24 +1,11 @@
 ---
 - hosts: localhost
   vars:
-    create_infra: false
     create_swarm: true
-    create_swarm: true
-#    skip_create: false
     vagrant: true
     aws: false
   roles:
     - role: infra-init
-
-#- hosts: shelleg-infra-instances
-#  become: yes
-#  become_user: root
-#  pre_tasks:
-#    - debug: msg="Install stuff on all infra instances"
-#  roles:
-#    - role: shelleg-common
-#    - role: docker-host
-#
 
 - hosts: shelleg-swarm-instances
   vars:
@@ -30,6 +17,7 @@
     - role: shelleg-common
     - role: apt-cacher-ng
     - role: docker-host
+    - role: docker-dnsmasq
 
 - hosts: shelleg-manager1
   become: yes
@@ -48,11 +36,3 @@
     - role: docker-swarm-worker
   vars:
     - swarmToken: "{{ hostvars['shelleg-manager1']['swarmToken'] }}"
-
-#- hosts: all:!localhost
-#  become: yes
-#  become_user: root
-#  pre_tasks:
-#    - debug: msg="Do stuff on all instances except localhost"
-#  roles:
-#    -  role: slack-notify

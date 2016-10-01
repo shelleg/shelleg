@@ -1,21 +1,16 @@
 ---
 - hosts: localhost
   vars:
-    create_infra: true
     vagrant: true
-    skip_create: true
+    create_infra: true
     create_swarm: false
   roles:
     -  role: infra-init
 
-- hosts: shelleg-swarm-instances:shelleg-infra-instances
+- hosts: shelleg-infra-instances
   become: true
   roles:
     - role: shelleg-common
-
-- hosts: shelleg-infra01
-  become: true
-  roles:
     - role: apt-cacher-ng
     - role: docker-host
   tasks:
@@ -25,16 +20,12 @@
       with_items: "{{ docker_images }}"
 
 - hosts: shelleg-infra01
-  become: yes
-  become_user: root
+  become: true
   roles:
-    - role: docker-dnsmasq
+    - role: apt-cacher-ng
     - role: docker-ntp
+    - role: docker-dnsmasq
 #    - role: docker-consul
 #    - role: docker-registry
 
-#- hosts: shelleg-infra02
-#  become: yes
-#  become_user: root
-#  roles:
-#    - role: docker-apt-cacher-ng
+
