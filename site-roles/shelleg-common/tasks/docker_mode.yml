@@ -12,8 +12,8 @@
 
 - debug: "msg=\"{{ inventory_hostname }} docker_mode is set to: {{ docker_mode }}\""
 
-- debug: msg="hi there its true"
+- debug: msg="docker_mode is => true"
   when: docker_mode
 
-- debug: msg="hi there its false"
+- debug: msg="docker_mode is => false"
   when: not docker_mode
