@@ -66,3 +66,11 @@
     mode: 0644
   notify:
     - restart docker
+
+- name: Add users to the docker group
+  user:
+    name:   "{{ item }}"
+    groups: "{{ docker_group }}"
+    append: yes
+  with_items: "{{docker_group_members}}"
+  when: docker_group_members is defined
