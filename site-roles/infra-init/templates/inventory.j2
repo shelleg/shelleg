@@ -12,6 +12,8 @@
 {{ shelleg.prefix }}-{{ host.cname }}
 {% endfor %}
 
+
+{% if create_swarm == true %}
 {% for host in shelleg_hosts.swarm.swarm_managers %}
 [{{ shelleg.prefix }}-{{ host.cname }}]
 {{ shelleg.prefix }}-{{ host.cname }} ansible_host="{{ host.ip }}" ansible_port=22 ansible_user="{{ host.user }}" ansible_ssh_private_key_file="{{ shelleg.vagrant_dir }}/.vagrant/machines/{{ shelleg.prefix }}-{{ host.cname }}/virtualbox/private_key"
@@ -36,3 +38,4 @@
 {% for host in shelleg_hosts.swarm.swarm_workers %}
 {{ shelleg.prefix }}-{{ host.cname }}
 {% endfor %}
+{% endif %}
