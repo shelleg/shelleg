@@ -1,9 +1,13 @@
 ---
 # tasks file for shelleg-common
 
-#- name: "Set instance hostname"
-#  hostname:
-#    name: "{{ inventory_hostname }}"
+- name: "Set Hostname's"
+  include: "hostname.yml"
+  tags:
+    - hostname
 
 - name: "Check internet mode"
   include: "connectivity.yml"
+
+- name: "Check if docker mode is on/off"
+  include: "docker_mode.yml"

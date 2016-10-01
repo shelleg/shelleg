@@ -72,3 +72,4 @@ autom4te.cache
 *.tgz
 *.tar.gz
 
+tmp/

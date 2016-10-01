@@ -9,6 +9,7 @@
     -  role: infra-init
 
 - hosts: shelleg-swarm-instances:shelleg-infra-instances
+  become: true
   roles:
     - role: shelleg-common
 

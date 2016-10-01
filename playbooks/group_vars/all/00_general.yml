@@ -14,6 +14,7 @@ shelleg:
   port: 22
   vagrant_dir: "{{ playbook_dir }}/../vagrant"
   domain_name: shelleg.local
+  domain: shelleg.local
   dns_searches:
     - shelleg.local
   dns:

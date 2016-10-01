@@ -1,0 +1,21 @@
+---
+- set_fact:
+    fqdn: "{{ inventory_hostname }}.{{ shelleg.domain }}"
+    hostname: "{{ inventory_hostname_short }}"
+
+- name: "Set Hostname with hostname command"
+  hostname: name="{{ hostname }}"
+
+- name: "Re-gather facts"
+  action: setup
+  when: ansible_hostname != fqdn
+
+- name: "Build hosts file (backups will be made)"
+  lineinfile: dest=/etc/hosts regexp='^{{ ansible_eth1.ipv4.address }}' line='{{ ansible_eth1.ipv4.address }} {{ fqdn }} {{ inventory_hostname_short }}' state=present backup=yes
+  when: ansible_default_ipv4.address is defined
+
+- name: "restart hostname"
+  service: name=hostname state=restarted
+  async: 45
+  poll: 0
+  when: ansible_distribution not in [ 'RedHat', 'CentOS' ]
