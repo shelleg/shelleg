@@ -31,8 +31,8 @@
       tags: code,swarm
     - role: dnsmasq         # configure to use dnsmasq as dns
       tags: code,dns
-    - role: nfs
-      tags: init,nfs
+#    - role: nfs
+#      tags: init,nfs
 
 
 
