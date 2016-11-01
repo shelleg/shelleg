@@ -11,10 +11,6 @@
   when: ansible_hostname != fqdn
 
 - name: "Build hosts file (backups will be made)"
-  lineinfile: dest=/etc/hosts regexp='^{{ ansible_eth1.ipv4.address }}' line='{{ ansible_eth1.ipv4.address }} {{ fqdn }} {{ inventory_hostname_short }}' state=present backup=yes
-  when: ansible_default_ipv4.address is defined
-
-- name: "Build hosts file (backups will be made)"
   lineinfile:
     dest: /etc/hosts
     line: '127.0.0.1       {{ ansible_hostname }}.{{ shelleg.domain }}  {{ ansible_hostname }}'
