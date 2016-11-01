@@ -1,8 +1,5 @@
 ---
 ### see REFERENCE Below as needed 
-- src: https://github.com/shelleg/ansible-role-docker-ntp.git
-  version: master
-  name: docker-ntp
 
 - src: https://github.com/shelleg/ansible-role-apt-cacher-ng.git
   version: master
