@@ -1,6 +1,6 @@
 ---
 - include: deploy-infra.yml
-- hosts: shelleg-infra01
+- hosts: infra01
   become: yes
   become_user: root
   roles:

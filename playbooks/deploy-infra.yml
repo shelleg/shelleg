@@ -1,31 +1,68 @@
 ---
 - hosts: localhost
   vars:
-    vagrant: true
-    create_infra: true
-    create_swarm: false
   roles:
     -  role: infra-init
+       tags: init
+  tasks:
+    - name: "Remove all known hosts from infra && swarm hosts -
+            unless you want to be insecure this is the best comprermise ..."
+      shell: "ssh-keygen -R {{ item.ip }}"
+      with_items:
+      - "{{ shelleg_hosts.infra }}"
+      - "{{ shelleg_hosts.swarm.swarm_managers }}"
+      - "{{ shelleg_hosts.swarm.swarm_workers }}"
+      ignore_errors: true
+    - name: "Pausing for 7 secs to let Ansible get a grip of ssh connections ..."
+      pause: seconds=7
 
 - hosts: shelleg-infra-instances
   become: true
+  vars:
+#    nfs_mode: server
   roles:
     - role: shelleg-common
+      tags: always
     - role: apt-cacher-ng
-    - role: docker-host
-  tasks:
-    - name: "pull Docker Images Instead of downloading in realtime"
-      docker_image:
-        name: "{{ item.name }}:{{ item.tag }}"
-      with_items: "{{ docker_images }}"
+      tags: init
+    - role: ntp
+      tags: core,ntp
+    - role: dnsmasq
+      tags: init,dns
+    - role: nfs
+      tags: init,nfs
 
-- hosts: shelleg-infra01
+- hosts: infra01
   become: true
+  vars:
+    ca_init: true
+    ca_certify_nodes: true
+    ca_fetch_keys: true
+    ca_force_create: true
+    ca_force_certify_nodes: true
+    ca_distribute_keys: true
   roles:
+    - role: ca
+      tags: ca
+
+- hosts: infra01
+  become: true
+  vars:
+    docker_single: true
+  roles:
+    - role: ansible-role-docker-swarm
+      tags: swarm
     - role: apt-cacher-ng
-    - role: docker-ntp
-    - role: docker-dnsmasq
-#    - role: docker-consul
+      tags: core
+    - role: docker-consul
+      tags: core,consul
 #    - role: docker-registry
+#    - role: ansible-role-docker-gogs
+#      tags: gogs
+#  tasks:
+#    - name: "pull Docker Images Instead of downloading in realtime"
+#      docker_image:
+#        name: "{{ item.name }}:{{ item.tag }}"
+#      with_items: "{{ docker_images }}"
 
 

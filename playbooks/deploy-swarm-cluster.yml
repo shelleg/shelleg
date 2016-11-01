@@ -6,33 +6,33 @@
     aws: false
   roles:
     - role: infra-init
+      tags: init
 
 - hosts: shelleg-swarm-instances
   vars:
+    ca_distribute_keys: true
   become: yes
   become_user: root
-  pre_tasks:
-    - debug: msg="Install stuff on all swarm instances"
   roles:
-    - role: shelleg-common
-    - role: apt-cacher-ng
-    - role: docker-host
-    - role: docker-dnsmasq
+    - role: shelleg-common # shellg common tasks
+      tags: always
+    - role: ntp
+      tags: core,ntp
+    - role: ca
+      tags: ca,core
 
-- hosts: shelleg-manager1
+- hosts: shelleg-swarm-instances
   become: yes
   become_user: root
-  pre_tasks:
-    - debug: msg="initailaize Swarm manager"
   roles:
-    - role: docker-swarm-manager
+    - role: apt-cacher-ng   # become apt-cacher client
+      tags: core
+    - role: ansible-role-docker-swarm
+      tags: code,swarm
+    - role: dnsmasq         # configure to use dnsmasq as dns
+      tags: code,dns
+    - role: nfs
+      tags: init,nfs
 
-- hosts: shelleg-swarm-instances-workers
-  become: yes
-  become_user: root
-  pre_tasks:
-    - debug: msg="Join workers"
-  roles:
-    - role: docker-swarm-worker
-  vars:
-    - swarmToken: "{{ hostvars['shelleg-manager1']['swarmToken'] }}"
+
+

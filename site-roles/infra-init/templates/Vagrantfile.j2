@@ -7,6 +7,8 @@ ansible_verbosity = '-vvv'
 # Specify minimum Vagrant version and Vagrant API version
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
+vagrant_dir = File.expand_path(File.dirname(__FILE__))
+extra_disk = "#{vagrant_dir}/extra_disk.vdi"
 
 # Require YAML module
 require 'yaml'
@@ -25,6 +27,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["ram"]
+        if servers["devices"]
+        	unless File.exist?(extra_disk)
+      		 vb.customize ['createhd', '--filename', extra_disk, '--size', 1 * "#{servers["devices"]["size"]}".to_i]
+    			end
+    			 vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', extra_disk]
+        end
       end
     end
   end

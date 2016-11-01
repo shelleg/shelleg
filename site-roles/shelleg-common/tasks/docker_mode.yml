@@ -5,8 +5,8 @@
 - command: "which docker"
   ignore_errors: true
   register: docker_stat
--
-  set_fact:
+
+- set_fact:
     docker_mode: true
   when: "docker_stat.rc == 0"
 

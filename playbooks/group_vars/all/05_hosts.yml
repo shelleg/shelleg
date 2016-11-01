@@ -3,28 +3,25 @@ shelleg_hosts:
   infra_group_name: shelleg-infra-instances
   infra:
     - { cname: "infra01",
+        ssl_key: infra01-priv-key.pem,
+        ssl_cert: infra01-cert.pem,
         user: "{{ shelleg.user }}",
         pass: "{{ shelleg.pass }}",
         box: "{{ shelleg.ubuntu.box }}",
         ip: "{{ shelleg.net_prefix }}.110",
         ssh_port: "{{ shelleg.port }}",
         ram: "{{ shelleg.ram_infra }}",
-        consul_leader: "true"
+        consul_leader: "true",
+        nfs_server: "true",
+        nfs_volume_size: 2048
       }
-#    - { cname: "infra02",
-#        user: "{{ shelleg.user }}",
-#        pass: "{{ shelleg.pass }}",
-#        box: "{{ shelleg.centos.box }}",
-#        ip: "{{ shelleg.net_prefix }}.109",
-#        ssh_port: "{{ shelleg.port }}",
-#        ram: "{{ shelleg.ram_infra }}",
-#        consul_leader: "true"
-#      }
   swarm_group_name: shelleg-swarm-instances
   swarm:
     swarm_managers_group_name: shelleg-swarm-instances-managers
     swarm_managers:
-      - { cname: "manager1",
+      - { cname: "swarm-mgr01",
+          ssl_key: swarm-mgr01-priv-key.pem,
+          ssl_cert: swarm-mgr01-cert.pem,
           user: "{{ shelleg.user }}",
           pass: "{{ shelleg.pass }}",
           box: "{{ shelleg.ubuntu.box }}",
@@ -35,7 +32,9 @@ shelleg_hosts:
         }
     swarm_workers_group_name: shelleg-swarm-instances-workers
     swarm_workers:
-      - { cname: "worker1",
+      - { cname: "swarm-node01",
+          ssl_key: swarm-node01-priv-key.pem,
+          ssl_cert: swarm-node01-cert.pem,
           user: "{{ shelleg.user }}",
           pass: "{{ shelleg.pass }}",
           box: "{{ shelleg.ubuntu.box }}",
@@ -44,12 +43,14 @@ shelleg_hosts:
           ram: "{{ shelleg.ram }}",
           consul_member: "true"
         }
-      - { cname: "worker2",
+      - { cname: "swarm-node02",
+          ssl_key: swarm-node02-priv-key.pem,
+          ssl_cert: swarm-node02-cert.pem,
           user: "{{ shelleg.user }}",
           pass: "{{ shelleg.pass }}",
           box: "{{ shelleg.ubuntu.box }}",
           ip: "{{ shelleg.net_prefix }}.113",
           ssh_port: "{{ shelleg.port }}",
           ram: "{{ shelleg.ram }}",
-          consul_member: true
+          consul_member: "true"
         }

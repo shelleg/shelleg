@@ -6,7 +6,8 @@ log/ansible.log
 inventories/inventory
 setenv.sh
 galaxy-roles/*/*
-
+keys_n_certs/*.pem
+keys_n_certs/*.key
 # build products...
 *.py[co]
 build

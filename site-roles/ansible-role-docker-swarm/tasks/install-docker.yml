@@ -1,0 +1,103 @@
+---
+# tasks file for ansible-role-docker-swarm
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "Install requirements"
+  apt: name="{{ item }}" update_cache=yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: "Add apt key of the latest repo with docker 1.2"
+  apt_key:
+    keyserver: "{{ docker_keyserver }}"
+    id: "{{ docker_repo_key }}"
+
+- name: "Add repository"
+  apt_repository:
+    repo: 'deb {{ docker_repo }} ubuntu-{{ ansible_distribution_release }} main'
+    state: present
+
+- name: "Purge unnedded packadges"
+  apt: name="{{ item }}" state=absent purge=yes
+  with_items:
+    - lxc-docker
+
+- name: "Verify that apt is pulling from the right repository"
+  command: apt-cache policy docker-engine
+
+- name: "Update apt cache for new repo to kick in"
+  apt:
+    update_cache: yes
+
+- file:
+    path: "/var/lib/dpkg/lock"
+    state: absent
+
+- name: "Install docker + reqs"
+  apt: name="{{ item }}" update_cache=yes state=latest
+  with_items:
+    - docker-engine
+    - python-pip
+  tags:
+    - apt
+
+- name: "Install docker-py"
+  pip: name=docker-py state=present version=1.7.0
+  tags:
+    - pip
+
+- name: "create systemd drop-in directory"
+  file: state=directory path="{{ docker_systemd_dir }}" owner=root group=root mode=0755
+
+- name: Add users to the docker group
+  user:
+    name:   "{{ item }}"
+    groups: "{{ docker_group }}"
+    append: yes
+  with_items: "{{ docker_group_members }}"
+  when: docker_group_members is defined
+
+- name: "set host facts based on group vars"
+  set_fact:
+    docker_host_cacert_file: "{{ tlscacert_dir }}/ca.pem"
+    docker_host_cert_file: "{{ tlscert_dir }}/{{ item.ssl_cert }}"
+    docker_host_key_file: "{{ tlskey_dir }}/{{ item.ssl_key }}"
+  with_items:
+  - "{{ shelleg_hosts.infra }}"
+  - "{{ shelleg_hosts.swarm.swarm_workers }}"
+  - "{{ shelleg_hosts.swarm.swarm_managers }}"
+  when: inventory_hostname == "{{ item.cname }}"
+
+- name: "set docker daemon options"
+  template:
+    src: docker.service.j2
+    dest: /etc/systemd/system/docker.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker
+  with_items:
+  - "{{ shelleg_hosts.infra }}"
+  - "{{ shelleg_hosts.swarm.swarm_workers }}"
+  - "{{ shelleg_hosts.swarm.swarm_managers }}"
+  when: inventory_hostname == "{{ item.cname }}"
+  register: conf
+
+- name: "reload systemd"
+  command: systemctl daemon-reload
+  when: conf.changed
+
+- name: "start docker service"
+  service: name=docker state=started enabled=yes
+  when: conf|changed
+  register: started
+
+- name: wait until docker service is up
+  wait_for: path=/var/run/docker.sock delay=10
+  when: (conf|changed) or (started|changed)
+
+
+

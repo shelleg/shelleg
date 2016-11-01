@@ -16,6 +16,22 @@
   version: master
   name: docker-registry
 
+- src: https://github.com/shelleg/ansible-role-ca.git
+  version: master
+  name: ca
+
+- src: https://github.com/shelleg/ansible-role-dnsmasq.git
+  version: master
+  name: dnsmasq
+
+- src: https://github.com/shelleg/ansible-role-nfs.git
+  version: master
+  name: nfs
+
+- src: https://github.com/shelleg/ansible-role-ntp.git
+  version: master
+  name: ntp
+
 ### REFERENCE ###
 ##  DO NOT REOMVE - use as reference ...
  # from galaxy
