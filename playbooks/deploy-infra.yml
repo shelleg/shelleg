@@ -29,8 +29,8 @@
       tags: core,ntp
     - role: dnsmasq
       tags: init,dns
-    - role: nfs
-      tags: init,nfs
+#    - role: nfs
+#      tags: init,nfs
 
 - hosts: infra01
   become: true
