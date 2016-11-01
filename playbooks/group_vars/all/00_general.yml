@@ -4,8 +4,7 @@ shelleg:
   user: vagrant
   pass: vagrant
   ubuntu:
-#    box: "bento/ubuntu-16.04"
-    box: "geerlingguy/ubuntu1604"
+    box: "bento/ubuntu-16.04"
   centos:
     box: "centos/7"
   net_prefix: "172.16.1"
