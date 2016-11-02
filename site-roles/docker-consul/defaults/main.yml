@@ -15,10 +15,10 @@ consul_description: "Consul Service Discovery server and agent"
 consul_container_prefix: consul
 consul_container_tag: latest
 consul_container_image: "{{ consul_container_prefix }}"
-consul_ports: [ "8300:8300", "8301:8301", "8301:8301/udp", "8302:8302", "8302:8302/udp", "8400:8400", "{{ consul_port }}:{{ consul_port }}", "8600:53" ]
+consul_ports: [ "8300:8300", "8301:8301", "8301:8301/udp", "8302:8302", "8302:8302/udp", "8400:8400", "{{ consul_port }}:{{ consul_port }}", "8600:8600/udp" ]
 consul_volumes: [ ]
 consul_extra_opts: [ "-h {{ consul_service_name }}" ]
 
-consul_cmd: "-server -advertise {{ consul_leader_ip }} -bootstrap-expect 1"
+consul_cmd: "agent -server -client=0.0.0.0  -advertise {{ consul_leader_ip }} -bootstrap-expect 1"
 
 

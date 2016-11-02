@@ -6,8 +6,7 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=on-failure
-ExecStartPre=-/usr/bin/docker stop {{ consul_service_name }}
-ExecStartPre=-/usr/bin/docker rm {{ consul_service_name }}
+RestartSec=10s
 ExecStartPre=-/usr/bin/docker pull {{ consul_container_image }}
 ExecStart=/usr/bin/docker run --rm -t \
 {% for port in  consul_ports %}
@@ -20,10 +19,9 @@ ExecStart=/usr/bin/docker run --rm -t \
     {{ option }} \
 {% endfor %}
     --name {{ consul_service_name }} {{ consul_container_image }} {{ consul_cmd }}
+
 ExecStop=-/usr/bin/docker stop {{ consul_service_name }}
-ExecStop=-/usr/bin/docker rm {{ consul_container_name }}
-Restart=always
-RestartSec=10s
+ExecStopPost=-/usr/bin/docker rm {{ consul_service_name }}
 
 [Install]
 WantedBy=multi-user.target
