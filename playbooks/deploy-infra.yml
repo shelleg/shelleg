@@ -56,6 +56,9 @@
       tags: core
     - role: docker-consul
       tags: core,consul
+    - role: docker-registrator
+      tags: core,registrator
+
 #    - role: docker-registry
 #    - role: ansible-role-docker-gogs
 #      tags: gogs

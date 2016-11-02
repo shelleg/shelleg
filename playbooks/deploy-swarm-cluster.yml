@@ -33,6 +33,5 @@
       tags: code,dns
 #    - role: nfs
 #      tags: init,nfs
-
-
-
+    - role: docker-registrator
+      tags: registrator

@@ -44,7 +44,10 @@
     - apt
 
 - name: "Install docker-py"
-  pip: name=docker-py state=present version=1.7.0
+  pip:
+    name: docker-py
+    state: present
+    version: 1.7.0
   tags:
     - pip
 
