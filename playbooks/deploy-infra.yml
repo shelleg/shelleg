@@ -10,6 +10,7 @@
       shell: "ssh-keygen -R {{ item.ip }}"
       with_items:
       - "{{ shelleg_hosts.infra }}"
+      - "{{ shelleg_hosts.ci }}"
       - "{{ shelleg_hosts.swarm.swarm_managers }}"
       - "{{ shelleg_hosts.swarm.swarm_workers }}"
       ignore_errors: true
@@ -19,45 +20,37 @@
 - hosts: shelleg-infra-instances
   become: true
   vars:
-#    nfs_mode: server
-  roles:
-    - role: shelleg-common
-      tags: always
-    - role: apt-cacher-ng
-      tags: init
-    - role: ntp
-      tags: core,ntp
-    - role: dnsmasq
-      tags: init,dns
-#    - role: nfs
-#      tags: init,nfs
-
-- hosts: infra01
-  become: true
-  vars:
+    # optinally run nfs server ...
+    #    nfs_mode: server
     ca_init: true
     ca_certify_nodes: true
     ca_fetch_keys: true
     ca_force_create: true
     ca_force_certify_nodes: true
     ca_distribute_keys: true
-  roles:
-    - role: ca
-      tags: ca
-
-- hosts: infra01
-  become: true
-  vars:
+    # standalone docker daemon
     docker_single: true
   roles:
-    - role: ansible-role-docker-swarm
-      tags: swarm
+    - role: shelleg-common
+      tags: always
     - role: apt-cacher-ng
-      tags: core
+      tags: core,apt
+    - role: ntp
+      tags: core,ntp
+    - role: dnsmasq
+      tags: core,dns
+    - role: ca
+      tags: ca
+    - role: ansible-role-docker-swarm
+      tags: core,swarm
     - role: docker-consul
       tags: core,consul
     - role: docker-registrator
       tags: core,registrator
+
+
+#    - role: nfs
+#      tags: init,nfs
 
 #    - role: docker-registry
 #    - role: ansible-role-docker-gogs

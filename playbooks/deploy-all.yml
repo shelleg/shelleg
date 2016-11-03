@@ -1,3 +1,4 @@
 ---
 - include: deploy-infra.yml
 - include: deploy-swarm-cluster.yml
+- include: check.yml

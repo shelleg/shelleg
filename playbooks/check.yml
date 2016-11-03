@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  tasks:
+    - name: "dig infra01"
+      shell: "dig consul.service.consul @172.16.1.110"
+      register: dig_infra01
+
+    - name: "dig consul on infra01"
+      shell: "dig consul.service.consul @172.16.1.110 -p8600"
+      register: dig_consul_infra01
+
+    - debug:
+        var: dig_infra01
+
+    - debug:
+        var: dig_consul_infra01
+
+- hosts: infra01
+  become: true
+  tasks:
+    - name: "Check resolving"
+      shell: "docker ps"
+      register: doccker_ps_on_infra01
+
+    - debug:
+        var: doccker_ps_on_infra01
+
+    - name: "Check resolving"
+      shell: "dig -t A www.tikalk.com"
+      register: dig_on_infra01
+
+    - debug:
+        var: dig_on_infra01
+
+- hosts: localhost
+  tasks:
+    - name: "Check Jenkins is availble"
+      uri:
+        url: http://172.16.1.109:8080
+        user: admin
+        password: admin
+        force_basic_auth: yes
+        status_code: 201

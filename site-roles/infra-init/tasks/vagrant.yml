@@ -34,6 +34,10 @@
   include: vagrant-infra.yml
   when: create_infra == true
 
+- name: "Infra hosts creation"
+  include: vagrant-ci.yml
+  when: create_ci == true
+
 - name: "Swarm hosts creation"
   include: vagrant-swarm.yml
   when: create_swarm == true

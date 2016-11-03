@@ -1,0 +1,75 @@
+---
+#- include: deploy-infra.yml
+
+- hosts: localhost
+  vars:
+    create_infra: false
+    create_ci: true
+  roles:
+    -  role: infra-init
+       tags: init
+
+- hosts: ci
+  become: yes
+  become_user: root
+  roles:
+    - role: shelleg-common
+      tags: always
+    - role: apt-cacher-ng
+      tags: core,apt
+    - role: ntp
+      tags: core,ntp
+    - role: dnsmasq
+      tags: core,dns
+    - role: ca
+      tags: ca
+    - role: ansible-role-docker-swarm
+      tags: core,swarm
+    - role: docker-registrator
+      tags: registrator
+
+  tasks:
+    - name: "Create Jenkins home on Docker host OS"
+      file:
+        state: directory
+        dest: /var/jenkins_home
+        owner: root
+        group: root
+        mode: 0777
+      tags: ci,jenkins
+
+    - name: "Copy keys"
+      copy:
+        src: "{{ playbook_dir }}/ci/key/{{ item }}"
+        dest: "/root/.ssh/"
+        owner: root
+        group: root
+        mode: 0400
+        force: yes
+      with_items:
+        - id_rsa
+        - id_rsa.pub
+      tags: ci,jenkins
+
+    - name: "ensure github.com is a known host"
+      lineinfile:
+        dest: /root/.ssh/known_hosts
+        create: yes
+        state: present
+        line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+        regexp: "^github\\.com"
+      tags: ci,jenkins
+      
+    - name: "Launch Jenkins-ci server on port 8080"
+      docker_container:
+        name: jenkins
+        hostname: jenkins
+        image: jenkins:latest
+        state: started
+        ports: "8080:8080"
+        privileged: true
+        user: "root:root"
+        volumes:
+          - "/var/jenkins_home:/var/jenkins_home:rw"
+          - "/root/.ssh:/root/.ssh:ro"
+      tags: ci,jenkins

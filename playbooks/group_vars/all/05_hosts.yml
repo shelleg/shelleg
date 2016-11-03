@@ -1,5 +1,16 @@
 ---
 shelleg_hosts:
+  ci:
+    - { cname: "ci",
+        ssl_key: ci-priv-key.pem,
+        ssl_cert: ci-cert.pem,
+        user: "{{ shelleg.user }}",
+        pass: "{{ shelleg.pass }}",
+        box: "{{ shelleg.ubuntu.box }}",
+        ip: "{{ shelleg.net_prefix }}.109",
+        ssh_port: "{{ shelleg.port }}",
+        ram: "{{ shelleg.ram_infra }}",
+      }
   infra_group_name: shelleg-infra-instances
   infra:
     - { cname: "infra01",

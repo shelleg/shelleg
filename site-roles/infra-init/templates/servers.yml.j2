@@ -13,6 +13,14 @@
   {% endif %}
 {% endfor %}
 
+{% for host in shelleg_hosts.ci %}
+- name: {{ host.cname }}
+  box: {{ host.box }}
+  ram: {{ host.ram }}
+  ip:  {{ host.ip }}
+
+{% endfor %}
+
 {% for host in shelleg_hosts.swarm.swarm_managers %}
 - name: {{ host.cname }}
   box: {{ host.box }}
