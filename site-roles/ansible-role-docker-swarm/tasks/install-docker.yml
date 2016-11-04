@@ -9,7 +9,7 @@
     - apt-transport-https
     - ca-certificates
 
-- name: "Add apt key of the latest repo with docker 1.2"
+- name: "Add apt key of the latest repo with docker 1.12"
   apt_key:
     keyserver: "{{ docker_keyserver }}"
     id: "{{ docker_repo_key }}"
