@@ -1,5 +1,9 @@
 ---
 ### see REFERENCE Below as needed 
+- src: https://github.com/shelleg/ansible-role-swarm-visualizer.git
+  version: master
+  name: swarm-visualizer
+
 - src: https://github.com/shelleg/ansible-role-docker-registrator.git
   version: master
   name: docker-registrator

@@ -35,3 +35,10 @@
 #      tags: init,nfs
     - role: docker-registrator
       tags: registrator
+
+- hosts: shelleg-swarm-instances-managers
+  become: yes
+  become_user: root
+  roles:
+    - role: swarm-visualizer
+      tags: swarm,visualizer
