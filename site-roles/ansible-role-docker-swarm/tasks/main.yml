@@ -4,23 +4,23 @@
 - name: "Install Docker-engine"
   include: install-docker.yml
 
-#- block:
-#  - set_fact:
-#      swarm_manager_ip: "{{ shelleg_hosts.swarm.swarm_managers[0].ip}}"
-#      swarm_manager_hostname: "{{ shelleg_hosts.swarm.swarm_managers[0].cname }}"
-#
-#  - name: "Is Swarm available || Active"
-#    shell: docker info | grep -q "^Swarm"':'" active"
-#    register: swarm_avail
-#    changed_when: false
-#    ignore_errors: True
-#
-#  - name: "Initialize|join swarm manager(s)"
-#    include: swarm-manager-init.yml
-#    when: inventory_hostname == swarm_manager_hostname
-#
-#  - name: "Initialize|join swarm worker(s)"
-#    include: swarm-worker-init.yml
-#    when: inventory_hostname != swarm_manager_hostname
-#
-#  when: docker_single is undefined
+- block:
+  - set_fact:
+      swarm_manager_ip: "{{ shelleg_hosts.swarm.swarm_managers[0].ip}}"
+      swarm_manager_hostname: "{{ shelleg_hosts.swarm.swarm_managers[0].cname }}"
+
+  - name: "Is Swarm available || Active"
+    shell: docker info | grep -q "^Swarm"':'" active"
+    register: swarm_avail
+    changed_when: false
+    ignore_errors: True
+
+  - name: "Initialize|join swarm manager(s)"
+    include: swarm-manager-init.yml
+    when: inventory_hostname == swarm_manager_hostname
+
+  - name: "Initialize|join swarm worker(s)"
+    include: swarm-worker-init.yml
+    when: inventory_hostname != swarm_manager_hostname
+
+  when: docker_single is undefined

@@ -95,7 +95,6 @@
 
 - name: "start docker service"
   service: name=docker state=started enabled=yes
-  when: conf|changed
   register: started
 
 - name: wait until docker service is up
