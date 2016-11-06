@@ -30,38 +30,35 @@ shelleg_hosts:
   swarm:
     swarm_managers_group_name: shelleg-swarm-instances-managers
     swarm_managers:
-      - { cname: "swarm-mgr01",
-          ssl_key: swarm-mgr01-priv-key.pem,
-          ssl_cert: swarm-mgr01-cert.pem,
-          user: "{{ shelleg.user }}",
-          pass: "{{ shelleg.pass }}",
-          box: "{{ shelleg.ubuntu.box }}",
-          ip: "{{ shelleg.net_prefix }}.111",
-          ssh_port: "{{ shelleg.port }}",
-          ram: "{{ shelleg.ram }}",
-          consul_member: "true"
-        }
+      - cname: "swarm-mgr01"
+        ssl_key: swarm-mgr01-priv-key.pem
+        ssl_cert: swarm-mgr01-cert.pem
+        user: "{{ shelleg.user }}"
+        pass: "{{ shelleg.pass }}"
+        box: "{{ shelleg.ubuntu.box }}"
+        ip: "{{ shelleg.net_prefix }}.111"
+        ssh_port: "{{ shelleg.port }}"
+        ram: "{{ shelleg.ram }}"
+        consul_member: "true"
     swarm_workers_group_name: shelleg-swarm-instances-workers
     swarm_workers:
-      - { cname: "swarm-node01",
-          ssl_key: swarm-node01-priv-key.pem,
-          ssl_cert: swarm-node01-cert.pem,
-          user: "{{ shelleg.user }}",
-          pass: "{{ shelleg.pass }}",
-          box: "{{ shelleg.ubuntu.box }}",
-          ip: "{{ shelleg.net_prefix }}.112",
-          ssh_port: "{{ shelleg.port }}",
-          ram: "{{ shelleg.ram }}",
-          consul_member: "true"
-        }
-      - { cname: "swarm-node02",
-          ssl_key: swarm-node02-priv-key.pem,
-          ssl_cert: swarm-node02-cert.pem,
-          user: "{{ shelleg.user }}",
-          pass: "{{ shelleg.pass }}",
-          box: "{{ shelleg.ubuntu.box }}",
-          ip: "{{ shelleg.net_prefix }}.113",
-          ssh_port: "{{ shelleg.port }}",
-          ram: "{{ shelleg.ram }}",
-          consul_member: "true"
-        }
+      - cname: "swarm-node01"
+        ssl_key: swarm-node01-priv-key.pem
+        ssl_cert: swarm-node01-cert.pem
+        user: "{{ shelleg.user }}"
+        pass: "{{ shelleg.pass }}"
+        box: "{{ shelleg.ubuntu.box }}"
+        ip: "{{ shelleg.net_prefix }}.112"
+        ssh_port: "{{ shelleg.port }}"
+        ram: "{{ shelleg.ram }}"
+        consul_member: "true"
+      - cname: "swarm-node02"
+        ssl_key: swarm-node02-priv-key.pem
+        ssl_cert: swarm-node02-cert.pem
+        user: "{{ shelleg.user }}"
+        pass: "{{ shelleg.pass }}"
+        box: "{{ shelleg.ubuntu.box }}"
+        ip: "{{ shelleg.net_prefix }}.113"
+        ssh_port: "{{ shelleg.port }}"
+        ram: "{{ shelleg.ram }}"
+        consul_member: "true"
