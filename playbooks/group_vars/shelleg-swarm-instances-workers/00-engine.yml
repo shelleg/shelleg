@@ -1,3 +1,5 @@
 ---
 #labels:
   #type: 'worker'
+#insecure_registry: "http://{{ shelleg_hosts.infra[0].cname }}:5000"
+#registry_mirror: "http://{{ shelleg_hosts.infra[0].cname }}:5000"

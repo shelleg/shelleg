@@ -37,6 +37,13 @@
   
 {% endfor %}
 
+{% for host in shelleg_hosts.registry %}
+- name: {{ host.cname }}
+  box: {{ host.box }}
+  ram: {{ host.ram }}
+  ip:  {{ host.ip }}
+
+{% endfor %}
 # e.g output:
 # - name: shelleg-manager
 #   box: ubuntu/trusty64

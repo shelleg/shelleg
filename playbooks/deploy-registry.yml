@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  vars:
+    create_registry: true
+    vagrant: true
+    aws: false
+  roles:
+    - role: infra-init
+      tags: init
+
+- hosts: shelleg-registry-instances
+  vars:
+    docker_single: true #required for swarm role to only install the engine
+    docker_registry_enable_ui: false
+  become: yes
+  become_user: root
+  roles:
+    - role: shelleg-common # shellg common tasks
+      tags: always
+    - role: ntp
+      tags: core,ntp
+    - role: ca
+      tags: ca,core
+    - role: dnsmasq
+      tags: dns
+    - role: ansible-role-docker-swarm
+      tags: docker,engine
+    - role: docker-registry
+      tags: docker,swarm,registry
+

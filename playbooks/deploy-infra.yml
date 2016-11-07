@@ -28,6 +28,7 @@
     ca_force_create: true
     ca_force_certify_nodes: true
     ca_distribute_keys: true
+    docker_registry_enable_ui: false
     # standalone docker daemon
     docker_single: true
   roles:
@@ -47,6 +48,8 @@
       tags: core,consul
     - role: docker-registrator
       tags: core,registrator
+    - role: docker-registry
+      tags: docker,swarm,registry
 
 
 #    - role: nfs

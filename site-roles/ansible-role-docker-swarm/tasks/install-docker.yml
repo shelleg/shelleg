@@ -71,6 +71,7 @@
   - "{{ shelleg_hosts.infra }}"
   - "{{ shelleg_hosts.swarm.swarm_workers }}"
   - "{{ shelleg_hosts.swarm.swarm_managers }}"
+  - "{{ shelleg_hosts.registry }}"
   when: inventory_hostname == "{{ item.cname }}"
 
 - name: "set docker daemon options"
@@ -86,8 +87,11 @@
   - "{{ shelleg_hosts.infra }}"
   - "{{ shelleg_hosts.swarm.swarm_workers }}"
   - "{{ shelleg_hosts.swarm.swarm_managers }}"
+  - "{{ shelleg_hosts.registry }}"
   when: inventory_hostname == "{{ item.cname }}"
   register: conf
+  tags:
+    - setconf
 
 - name: "reload systemd"
   command: systemctl daemon-reload
@@ -100,6 +104,3 @@
 - name: wait until docker service is up
   wait_for: path=/var/run/docker.sock delay=10
   when: (conf|changed) or (started|changed)
-
-
-
