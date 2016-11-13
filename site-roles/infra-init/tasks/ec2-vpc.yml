@@ -1,0 +1,34 @@
+---
+- ec2_vpc:
+  state: present
+  cidr_block: "{{ vpc.cidr_block }}"
+  resource_tags: { "Environment":"Development" }
+  subnets:
+    - cidr: "{{ vpc.cidr_block }}"
+      az: "{{ vpc.az_a }}"
+      resource_tags: { "Environment":"Dev", "AZ" : "{{ vpc.az_a }}" }
+
+
+    - cidr: "{{ vpc.cidr_block }}"
+      az: "{{ vpc.az_b }}"
+      resource_tags: { "Environment":"Dev", "AZ" : "{{ vpc.az_b }}" }
+
+    - cidr: "{{ vpc.cidr_block }}"
+      az: "{{ vpc.az_c }}"
+      resource_tags: { "Environment":"Dev", "AZ" : "{{ vpc.az_c }}" }
+
+#  internet_gateway: True
+#  route_tables:
+#    - subnets:
+#        - 172.22.2.0/24
+#        - 172.22.3.0/24
+#      routes:
+#        - dest: 0.0.0.0/0
+#          gw: igw
+#    - subnets:
+#        - 172.22.1.0/24
+#      routes:
+#        - dest: 0.0.0.0/0
+#          gw: igw
+  region: "{{ ec2.region }}"
+  register: vpc
